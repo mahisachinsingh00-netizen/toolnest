@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="color-scheme" content="light dark"/>
+<link rel="icon" href="data:,"/>
+<title>TOOLNEST — All Tools in One Place</title>
+<meta name="description" content="TOOLNEST: AI, Image, PDF, SEO, Developer, Calculator, Social Media, Converter and Productivity tools in one place. Free, browser-based, English + Hindi."/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<style>
+:root{
+  --bg:#f6f4ee; --surface:#fffdf8; --surface2:#efe9db; --ink:#1c2420; --muted:#5c665f; --line:#ddd5c2;
+  --accent:#0f6b4f; --accent-ink:#ffffff; --amber:#b7791f; --amber-bg:#fdf3d7; --chip:#e7efe9;
+  --danger:#b3352b; --radius:14px; --shadow:0 10px 30px rgba(28,36,32,.08);
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#121613; --surface:#1a1f1c; --surface2:#232a26; --ink:#eef2ee; --muted:#a7b3aa; --line:#334038; --accent:#3ecf9a; --accent-ink:#0b1512; --amber:#e3b34c; --amber-bg:#2c2716; --chip:#223129; --shadow:0 10px 30px rgba(0,0,0,.35); }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-sans-system,system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif;line-height:1.55}
+button,[role="button"],select,summary,input:not([type="checkbox"]){min-height:2.25rem}
+a{color:var(--accent)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+header.hero{padding:28px 0 8px}
+.brandrow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{font-weight:900;letter-spacing:.06em;font-size:1.35rem}
+.logo span{color:var(--accent)}
+.langtoggle{display:flex;gap:6px}
+.langtoggle button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer;font-weight:700}
+.langtoggle button.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+h1{font-size:clamp(1.9rem,5.5vw,3.1rem);line-height:1.08;margin:18px 0 8px;font-weight:900;letter-spacing:-.01em}
+h1 em{font-style:normal;color:var(--accent)}
+.lede{color:var(--muted);font-size:1.05rem;max-width:46rem;margin:0 0 16px}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 20px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:10px 14px;min-width:104px}
+.stat b{display:block;font-size:1.25rem}
+.stat small{color:var(--muted)}
+.searchbar{display:flex;gap:8px;flex-wrap:wrap}
+.searchbar input[type="search"]{flex:1 1 260px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:1rem}
+.searchbar button,.btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:12px;padding:10px 18px;font-weight:800;cursor:pointer;font-size:.95rem}
+.btn.ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.btn.small{padding:7px 12px;font-size:.85rem}
+.aibox{margin:18px 0 6px;background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--amber);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.aibox h2{margin:0 0 4px;font-size:1.1rem}
+.aibox p{margin:0 0 10px;color:var(--muted);font-size:.92rem}
+.aibox .row{display:flex;gap:8px;flex-wrap:wrap}
+.aibox input{flex:1 1 240px;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.chipbtn{border:1px solid var(--line);background:var(--chip);color:var(--ink);border-radius:999px;padding:6px 12px;cursor:pointer;font-size:.85rem;min-height:2.25rem}
+#aiResult{margin-top:10px;font-size:.95rem}
+section{padding:22px 0}
+h2.sec{font-size:1.45rem;margin:0 0 4px}
+p.secsub{color:var(--muted);margin:0 0 14px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.catcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px;text-align:left;cursor:pointer;color:var(--ink);box-shadow:var(--shadow)}
+.catcard:hover{border-color:var(--accent)}
+.catcard .ic{font-size:1.5rem}
+.catcard b{display:block;margin:6px 0 2px;font-size:1.02rem}
+.catcard small{color:var(--muted)}
+.catcard .cnt{float:right;background:var(--amber-bg);color:var(--amber);font-weight:800;border-radius:999px;padding:2px 10px;font-size:.8rem}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px}
+.pill{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 14px;cursor:pointer;font-weight:700;font-size:.88rem}
+.pill.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.toolgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:10px}
+.toolcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:13px;text-align:left;cursor:pointer;color:var(--ink)}
+.toolcard:hover{border-color:var(--accent)}
+.toolcard b{display:block;font-size:.97rem;margin-bottom:2px}
+.toolcard small{color:var(--muted);display:block;font-size:.83rem}
+.toolcard .tag{display:inline-block;margin-top:8px;font-size:.72rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);background:var(--chip);border-radius:6px;padding:2px 7px}
+#workspace{display:none;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin:8px 0 4px}
+#workspace.open{display:block}
+#workspace h3{margin:0 0 2px;font-size:1.25rem}
+#workspace .wsub{color:var(--muted);margin:0 0 12px;font-size:.92rem}
+label.fl{display:block;font-weight:700;font-size:.88rem;margin:10px 0 4px}
+textarea,input[type="text"],input[type="number"],input[type="date"],input[type="url"],select.wi{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+textarea{min-height:120px;resize:vertical}
+textarea.code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88rem}
+.outbox{white-space:pre-wrap;word-break:break-word;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;margin-top:12px;min-height:56px;font-size:.95rem}
+.outbox:empty{display:none}
+.wrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center}
+.note{font-size:.85rem;color:var(--muted)}
+.warn{background:var(--amber-bg);border-radius:10px;padding:10px 12px;font-size:.9rem;margin-top:10px}
+canvas.wcanvas{max-width:100%;border:1px solid var(--line);border-radius:10px;margin-top:10px;background:#fff}
+table.status{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+table.status th,table.status td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;font-size:.93rem;vertical-align:top}
+table.status th{background:var(--surface2)}
+.badge{display:inline-block;border-radius:999px;padding:2px 10px;font-size:.78rem;font-weight:800}
+.b-done{background:#d9f2e4;color:#0b5c3e}.b-plan{background:var(--amber-bg);color:var(--amber)}.b-no{background:#f6dcd8;color:var(--danger)}
+@media (prefers-color-scheme: dark){.b-done{background:#173b2a;color:#7fe3b6}.b-no{background:#3d201c;color:#ff9d92}}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+.panel h3{margin:0 0 8px;font-size:1.05rem}
+.panel ul{margin:0;padding-left:18px;color:var(--muted);font-size:.93rem}
+.panel li{margin:4px 0}
+.nextstep{background:var(--accent);color:var(--accent-ink);border-radius:var(--radius);padding:18px}
+.nextstep h2{margin:0 0 6px}
+.nextstep p{margin:0;opacity:.92}
+footer{padding:26px 0 40px;color:var(--muted);font-size:.88rem}
+.empty{color:var(--muted);padding:18px;text-align:center;border:1px dashed var(--line);border-radius:var(--radius)}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <div class="brandrow">
+    <div class="logo">TOOL<span>NEST</span></div>
+    <div class="langtoggle" role="group" aria-label="Language">
+      <button id="langEn" class="on" type="button">English</button>
+      <button id="langHi" type="button">हिन्दी</button>
+    </div>
+  </div>
+  <h1 data-i18n="h1">All Tools in <em>One Place</em></h1>
+  <p class="lede" data-i18n="lede">AI writing, image, PDF, SEO, developer, calculator, social media, converter and productivity tools — in one place, running right in your browser. No sign-up, no uploads to a server.</p>
+  <div class="stats">
+    <div class="stat"><b>106</b><small data-i18n="s1">Tools planned</small></div>
+    <div class="stat"><b>9</b><small data-i18n="s2">Categories</small></div>
+    <div class="stat"><b>₹0</b><small data-i18n="s3">Starting budget</small></div>
+    <div class="stat"><b>EN + हिं</b><small data-i18n="s4">Languages at launch</small></div>
+  </div>
+  <div class="searchbar">
+    <input type="search" id="search" placeholder="Search tools — try “EMI”, “JSON”, “compress”, “password”…" aria-label="Search tools"/>
+    <button type="button" id="searchBtn">Search</button>
+  </div>
+
+  <div class="aibox">
+    <h2>✦ TOOLNEST AI — <span data-i18n="aiT">find the right tool by just asking</span></h2>
+    <p data-i18n="aiP">Type your task in plain English or Hindi. This starter finder matches you to a tool instantly, on this page. The full Gemini-powered assistant is planned — it is not connected yet.</p>
+    <div class="row">
+      <input type="text" id="aiInput" placeholder="e.g. Meri image compress karo / Make a resume / YouTube title chahiye"/>
+      <button class="btn" type="button" id="aiBtn">Find tool</button>
+    </div>
+    <div class="chips">
+      <button class="chipbtn" type="button" data-q="mera resume bana do">Mera resume bana do</button>
+      <button class="chipbtn" type="button" data-q="image compress">Image compress karo</button>
+      <button class="chipbtn" type="button" data-q="youtube title">YouTube title banao</button>
+      <button class="chipbtn" type="button" data-q="emi calculate">EMI calculate karo</button>
+      <button class="chipbtn" type="button" data-q="seo keywords">SEO keywords do</button>
+      <button class="chipbtn" type="button" data-q="qr code">QR code banao</button>
+    </div>
+    <div id="aiResult" aria-live="polite"></div>
+  </div>
+</div></header>
+
+<main class="wrap">
+  <section id="workspace" aria-live="polite"></section>
+
+  <section>
+    <h2 class="sec" data-i18n="catH">Categories</h2>
+    <p class="secsub" data-i18n="catP">Tap a category to filter the tools below.</p>
+    <div class="catgrid" id="catGrid"></div>
+  </section>
+
+  <section id="toolsSec">
+    <h2 class="sec" data-i18n="allH">All tools</h2>
+    <p class="secsub"><span id="toolCount"></span> · <span data-i18n="allP">Tap any tool to open it here — most tools run fully in your browser.</span></p>
+    <div class="pills" id="pills"></div>
+    <div class="toolgrid" id="toolGrid"></div>
+    <div class="empty" id="noTools" style="display:none">No tool matches your search. Try a shorter word, e.g. “PDF”, “image”, “calc”.</div>
+  </section>
+
+  <section>
+    <h2 class="sec">Project status — plan vs. reality</h2>
+    <p class="secsub">Honest status from the project plan. “Planned” means decided, not yet built or verified.</p>
+    <div style="overflow-x:auto">
+    <table class="status">
+      <tr><th>Item</th><th>Status</th><th>Note</th></tr>
+      <tr><td>Name &amp; brand — TOOLNEST</td><td><span class="badge b-done">Final</span></td><td>“All Tools in One Place.”</td></tr>
+      <tr><td>106-tool plan &amp; 9 categories</td><td><span class="badge b-done">Done</span></td><td>Full catalogue is listed on this page.</td></tr>
+      <tr><td>Worldwide audience</td><td><span class="badge b-done">Decided</span></td><td>English default, Hindi at launch, more languages later.</td></tr>
+      <tr><td>Technology selection</td><td><span class="badge b-done">Decided</span></td><td>HTML/CSS/JS, GitHub, Cloudflare Pages, browser processing first.</td></tr>
+      <tr><td>GitHub account &amp; repository</td><td><span class="badge b-plan">Created*</span></td><td>*As confirmed by you — current repo contents not yet verified here.</td></tr>
+      <tr><td>Starter website</td><td><span class="badge b-done">This page</span></td><td>Homepage, search, categories and working browser tools.</td></tr>
+      <tr><td>All 106 tools fully functional</td><td><span class="badge b-plan">In progress</span></td><td>Core tools work below; advanced PDF/AI tools are starter versions.</td></tr>
+      <tr><td>TOOLNEST AI (Gemini)</td><td><span class="badge b-plan">Planned</span></td><td>Tool-finder works above; Gemini API is not connected yet.</td></tr>
+      <tr><td>Cloudflare deployment &amp; domain</td><td><span class="badge b-no">Not verified</span></td><td>Deployment and domain connection still to be confirmed.</td></tr>
+      <tr><td>SEO &amp; AdSense</td><td><span class="badge b-no">Not started</span></td><td>After launch: AdSense, affiliate links, premium tools, paid AI features.</td></tr>
+    </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="cols">
+      <div class="panel"><h3>How it will earn</h3><ul>
+        <li><b>Google AdSense</b> — ads on tool pages</li>
+        <li><b>Affiliate marketing</b> — recommended products &amp; services</li>
+        <li><b>Premium tools</b> — advanced features behind paid access</li>
+        <li><b>AI features</b> — free limits, then premium API usage</li>
+      </ul></div>
+      <div class="panel"><h3>Tech stack</h3><ul>
+        <li>HTML, CSS, JavaScript — fast, mobile-friendly pages</li>
+        <li>Browser processing for image, text &amp; PDF tools — no server cost to start</li>
+        <li>GitHub for code · Cloudflare Pages for free hosting</li>
+        <li>Cloudflare Workers + Gemini API when a backend is needed</li>
+      </ul></div>
+      <div class="panel"><h3>Design rules we fixed</h3><ul>
+        <li>Premium, clean, professional look</li>
+        <li>Search-first homepage, category-wise tools</li>
+        <li>Every tool gets its own page on the public site</li>
+        <li>Works on phone and computer, SEO-friendly</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="nextstep">
+      <h2>Next step: your GitHub repository</h2>
+      <p>Open the TOOLNEST repository on GitHub and send a screenshot of it in the chat. Then we can see exactly which files and code already exist, what is incomplete, and continue building the remaining tools in that same project — instead of starting over.</p>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap">TOOLNEST — All Tools in One Place. One website · 106 tools · one AI assistant · worldwide audience. Tools on this page run locally in your browser; your files are not uploaded anywhere.</div></footer>
+<script>
+"use strict";
+var CATS=[
+ {id:"ai",name:"AI Writing Tools",hi:"AI लेखन टूल्स",icon:"✍️",n:15},
+ {id:"image",name:"Image Tools",hi:"इमेज टूल्स",icon:"🖼️",n:15},
+ {id:"pdf",name:"PDF Tools",hi:"PDF टूल्स",icon:"📄",n:12},
+ {id:"seo",name:"SEO & Marketing",hi:"SEO और मार्केटिंग",icon:"🔍",n:12},
+ {id:"dev",name:"Developer Tools",hi:"डेवलपर टूल्स",icon:"💻",n:12},
+ {id:"calc",name:"Calculators",hi:"कैलकुलेटर",icon:"🧮",n:12},
+ {id:"social",name:"Social Media Tools",hi:"सोशल मीडिया टूल्स",icon:"📱",n:10},
+ {id:"conv",name:"File Converters",hi:"फ़ाइल कन्वर्टर",icon:"🔄",n:10},
+ {id:"prod",name:"Productivity Tools",hi:"प्रोडक्टिविटी टूल्स",icon:"⚡",n:8}
+];
+function T(name,cat,desc,kind,fn){return{name:name,cat:cat,desc:desc,kind:kind,fn:fn};}
+var TOOLS=[
+/* AI Writing 15 */
+T("AI Writer","ai","Write a paragraph on any topic (starter template engine)","gen","aiwriter"),
+T("Paragraph Generator","ai","Generate a structured paragraph from a topic","gen","paragraph"),
+T("Grammar Checker","ai","Fix common grammar, spacing and capitalisation issues","text","grammar"),
+T("Text Rewriter","ai","Rewrite text with simpler, fresher wording","text","rewrite"),
+T("Summary Generator","ai","Shorten long text into a short summary","text","summarize"),
+T("Resume Content Writer","ai","Turn your role and skills into resume bullet points","gen","resume"),
+T("Essay Writer","ai","Essay outline + draft paragraphs on a topic","gen","essay"),
+T("Email Writer","ai","Draft a polite professional email","gen","email"),
+T("Blog Intro Generator","ai","Opening paragraph ideas for a blog post","gen","blogintro"),
+T("Story Generator","ai","A short story starter from your idea","gen","story"),
+T("Poem Generator","ai","A short rhyming poem on a theme","gen","poem"),
+T("Letter Writer","ai","Formal letter draft — leave, request, application","gen","letter"),
+T("Cover Letter Writer","ai","Cover letter draft for a job role","gen","coverletter"),
+T("Text Expander","ai","Expand short notes into full sentences","text","expand"),
+T("Tone Changer","ai","Make text formal, friendly or short","text","tone"),
+/* Image 15 */
+T("Image Compressor","image","Compress JPG/PNG in the browser, download smaller file","image","compress"),
+T("Image Resizer","image","Resize an image to exact width × height","image","resize"),
+T("Crop Image","image","Centre-crop an image to a square or 16:9","image","crop"),
+T("JPG to PNG","image","Convert a JPG image to PNG","image","topng"),
+T("PNG to JPG","image","Convert a PNG image to JPG","image","tojpg"),
+T("Image Converter","image","Convert between PNG, JPG and WebP","image","convert"),
+T("Image Color Picker","image","Tap any point on an image to get its colour","image","picker"),
+T("Image to Base64","image","Turn an image file into a Base64 string","image","tob64"),
+T("Base64 to Image","image","Paste Base64 and view / download the image","text","fromb64"),
+T("Favicon Generator","image","Make a 64×64 favicon from any image","image","favicon"),
+T("Image Upscaler","image","Scale an image 2× with canvas smoothing","image","upscale"),
+T("Watermark Adder","image","Add your text watermark on an image","image","watermark"),
+T("Meme Text Adder","image","Add top & bottom caption text to an image","image","meme"),
+T("SVG to PNG","image","Paste SVG code and download it as PNG","text","svgtopng"),
+T("Image Info Viewer","image","See size, dimensions and type of an image","image","info"),
+/* PDF 12 */
+T("JPG to PDF","pdf","Convert an image into a PDF and download it","image","imgpdf"),
+T("Text to PDF","pdf","Type or paste text and download it as a PDF","text","textpdf"),
+T("PDF Info Viewer","pdf","Check a PDF's size and estimated page count","pdf","pdfinfo"),
+T("PDF Merge","pdf","Merge two PDFs into one (starter, browser-based)","pdf","pdfmerge"),
+T("PDF Page Counter","pdf","Count pages in a PDF file","pdf","pdfcount"),
+T("PDF to Text Note","pdf","Extract selectable text note from a PDF (basic)","pdf","pdftext"),
+T("PDF Rotate Guide","pdf","Rotate pages — starter guide with re-save tips + tool notes","pdf","pdfinfo"),
+T("PDF Compress Guide","pdf","Shrink a PDF: guidance + image-based recompress route","pdf","pdfinfo"),
+T("Image to PDF (Multi)","pdf","First image → PDF; add more via JPG to PDF","image","imgpdf"),
+T("TXT to PDF","pdf","Convert a .txt file's text into a PDF","text","textpdf"),
+T("PDF Watermark Planner","pdf","Plan watermark text, position and opacity","gen","pdfwm"),
+T("PDF Split Planner","pdf","Plan page ranges to split before exporting","gen","pdfsplit"),
+/* SEO 12 */
+T("Keyword Generator","seo","Keyword ideas from a seed topic","gen","keywords"),
+T("Meta Tag Generator","seo","Generate title, description & meta tags HTML","gen","metatags"),
+T("SEO Analyzer","seo","Analyse a page text: words, density, readability","text","seoanalyze"),
+T("Slug Generator","seo","Turn a title into a clean URL slug","text","slug"),
+T("Robots.txt Generator","seo","Build a robots.txt for your site","gen","robots"),
+T("Sitemap Generator","seo","Build sitemap.xml from a list of URLs","text","sitemap"),
+T("Title Tag Checker","seo","Check title length & pixel-safe limits","text","titlecheck"),
+T("Meta Description Checker","seo","Check description length (ideal 150–160 chars)","text","descCheck"),
+T("Keyword Density Checker","seo","How often a keyword appears in your text","text","density"),
+T("SERP Preview","seo","Preview how your page looks in Google results","gen","serp"),
+T("Open Graph Generator","seo","OG tags for Facebook / WhatsApp sharing","gen","ogtags"),
+T("Canonical URL Helper","seo","Clean a URL into its canonical form","text","canonical"),
+/* Developer 12 */
+T("JSON Formatter","dev","Format, validate & tidy JSON","code","jsonfmt"),
+T("JSON Minifier","dev","Minify JSON into one line","code","jsonmin"),
+T("HTML Formatter","dev","Indent & format HTML code","code","htmlfmt"),
+T("CSS Minifier","dev","Minify CSS code","code","cssmin"),
+T("JavaScript Minifier","dev","Basic JS minifier (comments & whitespace)","code","jsmin"),
+T("Base64 Encoder / Decoder","dev","Encode or decode Base64 text","code","b64"),
+T("UUID Generator","dev","Generate random UUIDs (v4)","gen","uuid"),
+T("HTML Encoder / Decoder","dev","Escape or unescape HTML entities","code","htmlenc"),
+T("URL Encoder / Decoder","dev","Encode or decode URLs","code","urlenc"),
+T("CSS Formatter","dev","Format CSS with clean indentation","code","cssfmt"),
+T("Lorem Ipsum Generator","dev","Dummy text for designs & mockups","gen","lorem"),
+T("Color Converter","dev","Convert HEX ↔ RGB ↔ HSL colours","gen","colorconv"),
+/* Calculators 12 */
+T("Age Calculator","calc","Exact age from date of birth","calc","age"),
+T("EMI Calculator","calc","Loan EMI, total interest & payable amount","calc","emi"),
+T("Percentage Calculator","calc","Find X% of a number, or % change","calc","percent"),
+T("BMI Calculator","calc","Body Mass Index from height & weight","calc","bmi"),
+T("Loan Calculator","calc","Loan EMI with tenure in years","calc","emi"),
+T("GST Calculator","calc","Add or remove GST (5/12/18/28%)","calc","gst"),
+T("SIP Calculator","calc","Monthly SIP future value estimate","calc","sip"),
+T("Discount Calculator","calc","Price after discount + amount saved","calc","discount"),
+T("Interest Calculator","calc","Simple & compound interest","calc","interest"),
+T("Date Calculator","calc","Days between two dates","calc","datediff"),
+T("Tip Calculator","calc","Tip + per-person split for a bill","calc","tip"),
+T("Unit Converter","calc","Length, weight & temperature converter","calc","unit"),
+/* Social 10 */
+T("Caption Generator","social","Instagram caption ideas for a topic","gen","caption"),
+T("Hashtag Generator","social","Hashtags for Instagram, Reels & Shorts","gen","hashtags"),
+T("Bio Generator","social","Short profile bio ideas","gen","bio"),
+T("YouTube Title Generator","social","Clickable YouTube title ideas","gen","yttitle"),
+T("YouTube Description Generator","social","Description template for a video topic","gen","ytdesc"),
+T("Username Generator","social","Username ideas from a name or word","gen","username"),
+T("Tweet Length Checker","social","Character count vs the 280 limit","text","tweet"),
+T("Post Idea Generator","social","Fresh post / reel ideas for a niche","gen","postidea"),
+T("Hashtag Counter","social","Count hashtags & words in a caption","text","hashcount"),
+T("Hook Line Generator","social","First-3-seconds hook lines for reels","gen","hook"),
+/* Converters 10 */
+T("CSV to JSON","conv","Convert CSV data into JSON","code","csv2json"),
+T("JSON to CSV","conv","Convert a JSON array into CSV","code","json2csv"),
+T("JSON to XML","conv","Convert JSON into simple XML","code","json2xml"),
+T("CSV to HTML Table","conv","Turn CSV into an HTML table","code","csv2html"),
+T("Markdown to HTML","conv","Basic Markdown → HTML converter","code","md2html"),
+T("Text to HTML","conv","Wrap text lines into HTML paragraphs","text","text2html"),
+T("Number to Words","conv","Convert a number into English words","calc","numwords"),
+T("Roman Numeral Converter","conv","Number ↔ Roman numerals","calc","roman"),
+T("Binary Converter","conv","Text ↔ Binary converter","text","binary"),
+T("Case Converter (File)","conv","Convert a pasted file's text case in bulk","text","caseconv"),
+/* Productivity 8 */
+T("Word Counter","prod","Words, characters, sentences & reading time","text","wordcount"),
+T("Character Counter","prod","Characters with & without spaces","text","wordcount"),
+T("QR Code Generator","prod","Make a QR code from text or a link","qr","qr"),
+T("Text Case Converter","prod","UPPER, lower, Title, Sentence case & more","text","caseconv"),
+T("Password Generator","prod","Strong random passwords, made locally","pass","pass"),
+T("Random Number Generator","prod","Random numbers in your range","calc","randnum"),
+T("Stopwatch & Timer","prod","Simple stopwatch with lap display","timer","timer"),
+T("Text Reverser & Sorter","prod","Reverse text, sort lines A–Z or shuffle","text","lines")
+];
+var catName=function(id){for(var i=0;i<CATS.length;i++)if(CATS[i].id===id)return CATS[i].name;return id;};
+</script>
+<script>
+"use strict";
+/* ---------- helpers ---------- */
+function $(s){return document.querySelector(s)}
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function dl(name,content,type){var b=content instanceof Blob?content:new Blob([content],{type:type||"text/plain"});var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},400)}
+function copyTxt(t,btn){if(navigator.clipboard)navigator.clipboard.writeText(t);if(btn){var o=btn.textContent;btn.textContent="Copied ✓";setTimeout(function(){btn.textContent=o},1200)}}
+function words(t){return (t.trim().match(/\S+/g)||[])}
+function slugify(t){return t.toLowerCase().trim().replace(/[^a-z0-9\s-]/g,"").replace(/[\s_]+/g,"-").replace(/-+/g,"-").replace(/^-|-$/g,"")}
+function inr(n){return "₹"+Number(n).toLocaleString("en-IN",{maximumFractionDigits:2})}
+
+/* ---------- render categories & tools ---------- */
+var activeCat="all", query="";
+function renderCats(){
+  $("#catGrid").innerHTML=CATS.map(function(c){return '<button class="catcard" type="button" data-cat="'+c.id+'"><span class="cnt">'+c.n+'</span><span class="ic">'+c.icon+'</span><b>'+esc(c.name)+'</b><small>'+esc(c.hi)+' · '+c.n+' tools</small></button>'}).join("");
+  var cards=document.querySelectorAll(".catcard");
+  for(var i=0;i<cards.length;i++)cards[i].addEventListener("click",function(){setCat(this.getAttribute("data-cat"));document.getElementById("toolsSec").scrollIntoView({behavior:"smooth"})});
+  var pills='<button class="pill'+(activeCat==="all"?" on":"")+'" type="button" data-cat="all">All 106</button>'+CATS.map(function(c){return '<button class="pill'+(activeCat===c.id?" on":"")+'" type="button" data-cat="'+c.id+'">'+esc(c.name)+' ('+c.n+')</button>'}).join("");
+  $("#pills").innerHTML=pills;
+  var ps=document.querySelectorAll(".pill");
+  for(var j=0;j<ps.length;j++)ps[j].addEventListener("click",function(){setCat(this.getAttribute("data-cat"))});
+}
+function setCat(id){activeCat=id;renderCats();renderTools()}
+function renderTools(){
+  var q=query.toLowerCase();
+  var list=TOOLS.filter(function(t){return (activeCat==="all"||t.cat===activeCat)&&(!q||t.name.toLowerCase().indexOf(q)>-1||t.desc.toLowerCase().indexOf(q)>-1||catName(t.cat).toLowerCase().indexOf(q)>-1)});
+  $("#toolCount").textContent="Showing "+list.length+" of 106 tools";
+  $("#noTools").style.display=list.length?"none":"block";
+  $("#toolGrid").innerHTML=list.map(function(t){var idx=TOOLS.indexOf(t);return '<button class="toolcard" type="button" data-idx="'+idx+'"><b>'+esc(t.name)+'</b><small>'+esc(t.desc)+'</small><span class="tag">'+esc(catName(t.cat))+'</span></button>'}).join("");
+  var cs=document.querySelectorAll(".toolcard");
+  for(var i=0;i<cs.length;i++)cs[i].addEventListener("click",function(){openTool(TOOLS[+this.getAttribute("data-idx")])});
+}
+$("#search").addEventListener("input",function(){query=this.value;renderTools()});
+$("#searchBtn").addEventListener("click",function(){query=$("#search").value;renderTools();document.getElementById("toolsSec").scrollIntoView({behavior:"smooth"})});
+
+/* ---------- language toggle (headings) ---------- */
+var I18N={hi:{h1:'सभी Tools, <em>एक ही जगह</em>',lede:'AI लेखन, इमेज, PDF, SEO, डेवलपर, कैलकुलेटर, सोशल मीडिया, कन्वर्टर और प्रोडक्टिविटी टूल्स — सब एक ही जगह, सीधे आपके ब्राउज़र में। न साइन-अप, न सर्वर पर अपलोड।',s1:'टूल्स की योजना',s2:'कैटेगरी',s3:'शुरुआती बजट',s4:'लॉन्च भाषाएँ',aiT:'सिर्फ़ पूछकर सही टूल पाओ',aiP:'अपना काम सामान्य English या Hindi में लिखो। ये स्टार्टर फ़ाइंडर तुरंत सही टूल बता देता है। पूरा Gemini वाला असिस्टेंट योजना में है — अभी जुड़ा नहीं है।',catH:'कैटेगरी',catP:'किसी कैटेगरी पर टैप करो — नीचे टूल्स फ़िल्टर हो जाएँगे।',allH:'सभी टूल्स',allP:'किसी भी टूल पर टैप करो — ज़्यादातर टूल्स पूरी तरह ब्राउज़र में चलते हैं।'}};
+var EN={};document.querySelectorAll("[data-i18n]").forEach(function(el){EN[el.getAttribute("data-i18n")]=el.innerHTML});
+function setLang(hi){document.querySelectorAll("[data-i18n]").forEach(function(el){var k=el.getAttribute("data-i18n");el.innerHTML=hi?(I18N.hi[k]||EN[k]):EN[k]});$("#langEn").classList.toggle("on",!hi);$("#langHi").classList.toggle("on",hi)}
+$("#langEn").addEventListener("click",function(){setLang(false)});
+$("#langHi").addEventListener("click",function(){setLang(true)});
+
+/* ---------- TOOLNEST AI finder (local matcher) ---------- */
+var AI_RULES=[
+ {k:["resume","cv","नौकरी","job biodata"],t:"Resume Content Writer",m:"Resume ke liye ye tool tumhara role aur skills ko strong bullet points me badal dega."},
+ {k:["compress","छोटा","size kam","दबा"],t:"Image Compressor",m:"Image ka size kam karne ke liye Image Compressor kholo — photo browser me hi compress hogi."},
+ {k:["youtube","video title","वीडियो"],t:"YouTube Title Generator",m:"YouTube title ke liye ye tool topic se clickable title ideas dega."},
+ {k:["keyword","seo","google rank"],t:"Keyword Generator",m:"SEO keywords ke liye Keyword Generator try karo — topic daalo, ideas pao."},
+ {k:["summary","summarize","छोटा करो","short karo","संक्षेप"],t:"Summary Generator",m:"Lambe text ko chhota karne ke liye Summary Generator sahi rahega."},
+ {k:["emi","loan","कर्ज़","किस्त"],t:"EMI Calculator",m:"Loan ki kist nikaalne ke liye EMI Calculator kholo."},
+ {k:["qr","क्यूआर"],t:"QR Code Generator",m:"QR code banane ke liye QR Code Generator kholo — link ya text daalo, QR ready."},
+ {k:["password","पासवर्ड"],t:"Password Generator",m:"Mazboot password ke liye Password Generator — password tumhare phone/PC par hi banta hai."},
+ {k:["pdf","पीडीएफ"],t:"JPG to PDF",m:"PDF kaam ke liye PDF Tools dekho — JPG to PDF yahin se shuru karo."},
+ {k:["json","जे सन"],t:"JSON Formatter",m:"JSON saaf/format karne ke liye JSON Formatter kholo."},
+ {k:["caption","कैप्शन"],t:"Caption Generator",m:"Photo/reel ke caption ke liye Caption Generator try karo."},
+ {k:["hashtag","हैशटैग"],t:"Hashtag Generator",m:"Hashtags ke liye Hashtag Generator — topic daalo, tags ready."},
+ {k:["age","उम्र","जन्म"],t:"Age Calculator",m:"Umr nikaalne ke liye Age Calculator — janm tareekh daalo, exact age milegi."},
+ {k:["word","शब्द गिन"],t:"Word Counter",m:"Shabd ginne ke liye Word Counter kholo."},
+ {k:["bmi","वज़न","weight"],t:"BMI Calculator",m:"BMI ke liye BMI Calculator — height aur weight daalo."},
+ {k:["image","photo","तस्वीर","फोटो"],t:"Image Resizer",m:"Image ka kaam hai — Image Tools me Resizer, Compressor, Converter sab milega."}
+];
+function findTool(q){
+  q=(q||"").toLowerCase();if(!q)return null;
+  for(var i=0;i<AI_RULES.length;i++){for(var j=0;j<AI_RULES[i].k.length;j++){if(q.indexOf(AI_RULES[i].k[j])>-1)return AI_RULES[i]}}
+  for(var k=0;k<TOOLS.length;k++){if(q.indexOf(TOOLS[k].name.toLowerCase())>-1||TOOLS[k].name.toLowerCase().indexOf(q)>-1&&q.length>2)return{t:TOOLS[k].name,m:TOOLS[k].desc}}
+  return null;
+}
+function runAI(){
+  var q=$("#aiInput").value;var r=findTool(q);var box=$("#aiResult");
+  if(!q.trim()){box.innerHTML="Pehle apna kaam likho — jaise “image compress karo” ya “EMI calculate karo”.";return}
+  if(!r){box.innerHTML="Is kaam ke liye exact tool nahi mila. Upar search me ek word try karo — jaise <b>PDF</b>, <b>image</b>, <b>calculator</b> — ya neeche categories dekho.";return}
+  box.innerHTML=esc(r.m)+' <button class="btn small" type="button" id="aiOpen">Open '+esc(r.t)+'</button>';
+  $("#aiOpen").addEventListener("click",function(){for(var i=0;i<TOOLS.length;i++)if(TOOLS[i].name===r.t){openTool(TOOLS[i]);break}});
+}
+$("#aiBtn").addEventListener("click",runAI);
+$("#aiInput").addEventListener("keydown",function(e){if(e.key==="Enter")runAI()});
+document.querySelectorAll(".chipbtn").forEach(function(b){b.addEventListener("click",function(){$("#aiInput").value=this.getAttribute("data-q");runAI()})});
+
+/* ---------- workspace ---------- */
+var ws=$("#workspace"), curTool=null, imgFile=null, imgURL=null, timerInt=null, timerSec=0;
+function openTool(t){
+  curTool=t;imgFile=null;
+  var h='<h3>'+esc(t.name)+'</h3><p class="wsub">'+esc(t.desc)+' · '+esc(catName(t.cat))+'</p><div id="wBody"></div><div class="outbox" id="wOut"></div><div class="wrow" id="wActions"></div><p class="note">Ye tool tumhare browser me chalta hai — data kahin upload nahi hota.</p>';
+  ws.innerHTML=h;ws.classList.add("open");buildForm(t);
+  ws.scrollIntoView({behavior:"smooth",block:"start"});
+}
+function out(html){$("#wOut").innerHTML=html}
+function actions(buttons){
+  var a=$("#wActions");a.innerHTML="";
+  buttons.forEach(function(b){var btn=document.createElement("button");btn.type="button";btn.className="btn"+(b.ghost?" ghost":"");btn.textContent=b.label;btn.addEventListener("click",b.fn);a.appendChild(btn)});
+  var raw=$("#wOut").textContent;
+  if(raw){var c=document.createElement("button");c.type="button";c.className="btn ghost";c.textContent="Copy result";c.addEventListener("click",function(){copyTxt($("#wOut").textContent,this)});a.appendChild(c)}
+}
+function textForm(placeholder,code){
+  $("#wBody").innerHTML='<label class="fl">Your text / input</label><textarea id="wIn" class="'+(code?"code":"")+'" placeholder="'+esc(placeholder||"Paste or type here…")+'"></textarea>';
+}
+function topicForm(label,extra){
+  $("#wBody").innerHTML='<label class="fl">'+esc(label||"Topic / keyword")+'</label><input type="text" id="wIn" placeholder="e.g. fitness tips for beginners"/>'+(extra||"");
+}
+function field(label,id,type,val,step){return '<label class="fl">'+esc(label)+'</label><input class="wi" type="'+(type||"number")+'" id="'+id+'" value="'+(val!=null?val:"")+'" '+(step?'step="'+step+'"':"")+'/>'}
+function val(id){var e=document.getElementById(id);return e?e.value:""}
+function num(id){return parseFloat(val(id))||0}
+
+function buildForm(t){
+  var k=t.kind,f=t.fn;
+  if(k==="text"||k==="code"){textForm(t.fn==="fromb64"?"Paste Base64 image data here…":(k==="code"?"Paste your code / data here…":"Paste or type your text here…"),k==="code");
+    actions([{label:"Run "+t.name,fn:function(){runTextTool(t,val("wIn"))}}]);return}
+  if(k==="gen"){topicForm(f==="resume"?"Your job role (skills next field)":f==="metatags"||f==="serp"||f==="ogtags"?"Page title":"Topic / keyword",
+      f==="resume"?field("Your skills (comma separated)","wIn2","text","communication, computer, sales"):
+      f==="metatags"||f==="serp"||f==="ogtags"?field("Page description","wIn2","text","")+'<label class="fl">Website URL</label><input class="wi" type="url" id="wIn3" placeholder="https://example.com/"/>':
+      f==="robots"?field("Your website URL","wIn2","url","https://example.com"):
+      f==="colorconv"?'<p class="note">Enter a HEX colour above, like #0f6b4f</p>':"");
+    actions([{label:"Generate",fn:function(){runGenTool(t,val("wIn"))}}]);return}
+  if(k==="calc"){buildCalc(t);return}
+  if(k==="image"){buildImage(t);return}
+  if(k==="pdf"){buildPdf(t);return}
+  if(k==="qr"){$("#wBody").innerHTML=field("Text or link for QR code","wIn","text","https://");actions([{label:"Make QR code",fn:function(){runQR()}}]);return}
+  if(k==="pass"){$("#wBody").innerHTML=field("Password length","wLen","number",16)+'<label class="fl"><input type="checkbox" id="wSym" checked/> Include symbols (!@#$)</label>';
+    actions([{label:"Generate password",fn:function(){runPass()}}]);runPass();return}
+  if(k==="timer"){$("#wBody").innerHTML='<div style="font-size:2.2rem;font-weight:900" id="wClock">00:00</div>';
+    actions([{label:"Start",fn:startTimer},{label:"Stop",ghost:true,fn:stopTimer},{label:"Reset",ghost:true,fn:function(){stopTimer();timerSec=0;tick()}}]);return}
+}
+
+/* ---------- text / code tools ---------- */
+function runTextTool(t,text){
+  var f=t.fn,r="";
+  if(!text.trim()&&["wordcount"].indexOf(f)===-1){out("Pehle kuch text daalo, phir Run dabao.");return}
+  try{
+  if(f==="grammar"){r=text.replace(/\s+/g," ").replace(/\bi\b/g,"I").replace(/(^\s*[a-z])|([.!?]\s+[a-z])/g,function(m){return m.toUpperCase()}).trim();r+="\n\n— Basic fixes applied: extra spaces, “i → I”, sentence capitals. Deep grammar needs the planned AI assistant."}
+  else if(f==="rewrite"){var map={very:"really",big:"large",small:"tiny",good:"great",bad:"poor",fast:"quick",happy:"glad",important:"key",use:"utilise",help:"support",make:"create",show:"display",buy:"purchase",get:"receive"};r=text.replace(/\b(very|big|small|good|bad|fast|happy|important|use|help|make|show|buy|get)\b/gi,function(m){return map[m.toLowerCase()]||m});r+="\n\n— Starter rewrite (word-level). Full AI rewriting comes with TOOLNEST AI."}
+  else if(f==="summarize"){var s=text.split(/(?<=[.!?])\s+/).filter(Boolean);var take=Math.max(1,Math.ceil(s.length/3));r=s.slice(0,take).join(" ");r+="\n\n— Summary: "+words(text).length+" words → "+words(r.split("—")[0]).length+" words (first key sentences)."}
+  else if(f==="expand"){r=text.split(/\n/).map(function(l){l=l.trim();if(!l)return"";return l.charAt(0).toUpperCase()+( /[.!?]$/.test(l)?l.slice(1):l.slice(1)+".")}).join("\n")}
+  else if(f==="tone"){r="FORMAL:\n"+text.replace(/\bdon't\b/gi,"do not").replace(/\bcan't\b/gi,"cannot").replace(/\bwon't\b/gi,"will not")+"\n\nFRIENDLY:\nHi! "+text+"\n\nSHORT:\n"+(words(text).slice(0,20).join(" "))+(words(text).length>20?"…":"")}
+  else if(f==="wordcount"){var w=words(text).length,c=text.length,cs=text.replace(/\s/g,"").length,sent=(text.match(/[.!?]+/g)||[]).length,para=text.split(/\n\s*\n/).filter(Boolean).length;r="Words: "+w+"\nCharacters: "+c+"\nCharacters (no spaces): "+cs+"\nSentences: "+sent+"\nParagraphs: "+para+"\nReading time: ~"+Math.max(1,Math.round(w/200))+" min\nSpeaking time: ~"+Math.max(1,Math.round(w/130))+" min"}
+  else if(f==="caseconv"){r="UPPERCASE:\n"+text.toUpperCase()+"\n\nlowercase:\n"+text.toLowerCase()+"\n\nTitle Case:\n"+text.toLowerCase().replace(/\b\w/g,function(c){return c.toUpperCase()})+"\n\nSentence case:\n"+text.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g,function(c){return c.toUpperCase()})+"\n\naLtErNaTiNg:\n"+text.split("").map(function(c,i){return i%2?c.toUpperCase():c.toLowerCase()}).join("")}
+  else if(f==="lines"){var ls=text.split(/\n/);r="REVERSED TEXT:\n"+text.split("").reverse().join("")+"\n\nSORTED LINES A–Z:\n"+ls.slice().sort().join("\n")+"\n\nUNIQUE LINES:\n"+ls.filter(function(v,i,a){return a.indexOf(v)===i}).join("\n")}
+  else if(f==="slug"){r=slugify(text)}
+  else if(f==="seoanalyze"){var w=words(text);var freq={};w.forEach(function(x){x=x.toLowerCase().replace(/[^a-z0-9]/g,"");if(x.length>3)freq[x]=(freq[x]||0)+1});var top=Object.keys(freq).sort(function(a,b){return freq[b]-freq[a]}).slice(0,8);r="Words: "+w.length+"\nCharacters: "+text.length+"\nTop keywords: "+top.map(function(x){return x+" ("+freq[x]+")"}).join(", ")+"\nVerdict: "+(w.length>=300?"Good length for a page/post.":"Thoda aur content likho — 300+ words SEO ke liye behtar hote hain.")}
+  else if(f==="titlecheck"){r="Title: "+text+"\nLength: "+text.length+" characters "+(text.length<=60?"✓ Ideal (≤60)":"⚠ Thoda lamba hai — 60 characters ke andar rakho")+"\nWords: "+words(text).length}
+  else if(f==="descCheck"){r="Description length: "+text.length+" characters\n"+(text.length>=150&&text.length<=160?"✓ Perfect range (150–160)":text.length<150?"⚠ Thoda chhota — 150 ke aas-paas rakho":"⚠ Thoda lamba — Google cut kar dega, 160 ke andar rakho")}
+  else if(f==="density"){var kw=promptSafeKw(); }
+  else if(f==="sitemap"){var urls=text.split(/\n/).map(function(u){return u.trim()}).filter(Boolean);r='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+urls.map(function(u){return "  <url><loc>"+esc(u)+"</loc></url>"}).join("\n")+"\n</urlset>";setTimeout(function(){actions([{label:"Download sitemap.xml",fn:function(){dl("sitemap.xml",r,"text/xml")}}])},0)}
+  else if(f==="canonical"){try{var u=new URL(text.trim());r=u.origin+u.pathname.replace(/\/$/,"")}catch(e){r="Valid URL daalo, jaise https://example.com/page/?utm=x"}}
+  else if(f==="tweet"){r="Characters: "+text.length+" / 280\n"+(text.length<=280?"✓ Tweet/post ke liye theek hai — "+(280-text.length)+" characters bache.":"⚠ "+(text.length-280)+" characters zyada hain.")}
+  else if(f==="hashcount"){var tags=text.match(/#\w+/g)||[];r="Hashtags: "+tags.length+"\nWords: "+words(text).length+"\nCharacters: "+text.length+(tags.length?"\nTags: "+tags.join(" "):"")}
+  else if(f==="text2html"){r=text.split(/\n/).filter(Boolean).map(function(l){return "<p>"+esc(l)+"</p>"}).join("\n")}
+  else if(f==="binary"){if(/^[01\s]+$/.test(text.trim())){r=text.trim().split(/\s+/).map(function(b){return String.fromCharCode(parseInt(b,2))}).join("")}else{r=text.split("").map(function(c){return c.charCodeAt(0).toString(2).padStart(8,"0")}).join(" ")}}
+  else if(f==="fromb64"){out('Image preview:<br><img src="'+(text.trim().indexOf("data:")===0?text.trim():"data:image/png;base64,"+text.trim())+'" style="max-width:100%;border-radius:10px" alt="Decoded image"/>');return}
+  else if(f==="svgtopng"){var img=new Image();var url="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(text);img.onload=function(){var cv=document.createElement("canvas");cv.width=img.width||512;cv.height=img.height||512;cv.getContext("2d").drawImage(img,0,0);out("SVG ready — neeche button se PNG download karo.");actions([{label:"Download PNG",fn:function(){cv.toBlob(function(b){dl("image.png",b)})}}])};img.onerror=function(){out("SVG code sahi nahi lag raha — dobara check karo.")};img.src=url;return}
+  else if(f==="textpdf"||f==="textpdf2"){makeTextPdf(text);return}
+  else if(f==="jsonfmt"){r=JSON.stringify(JSON.parse(text),null,2)}
+  else if(f==="jsonmin"){r=JSON.stringify(JSON.parse(text))}
+  else if(f==="htmlfmt"){r=text.replace(/></g,">\n<").split("\n").map(function(l,i){return l}).join("\n")}
+  else if(f==="cssmin"){r=text.replace(/\/\*[\s\S]*?\*\//g,"").replace(/\s+/g," ").replace(/\s*([{}:;,])\s*/g,"$1").trim()}
+  else if(f==="jsmin"){r=text.replace(/\/\/[^\n]*/g,"").replace(/\s+/g," ").trim();r+="\n\n/* Basic minify — comments & extra spaces removed. Advanced minify planned. */"}
+  else if(f==="cssfmt"){r=text.replace(/\s*\{\s*/g," {\n  ").replace(/;\s*/g,";\n  ").replace(/\s*\}\s*/g,"\n}\n").replace(/  \n\}/g,"}")}
+  else if(f==="b64"){try{r="ENCODED:\n"+btoa(unescape(encodeURIComponent(text)))+"\n\nDECODED:\n"+decodeURIComponent(escape(atob(text.trim())))}catch(e){r="ENCODED:\n"+btoa(unescape(encodeURIComponent(text)))+"\n\nDECODED: (input valid Base64 nahi hai)"}}
+  else if(f==="htmlenc"){var d=document.createElement("div");d.textContent=text;r="ENCODED:\n"+d.innerHTML+"\n\nDECODED:\n"+text.replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&amp;/g,"&")}
+  else if(f==="urlenc"){r="ENCODED:\n"+encodeURIComponent(text)+"\n\nDECODED:\n"+decodeURIComponent(text)}
+  else if(f==="csv2json"){var rows=text.trim().split(/\n/).map(function(l){return l.split(",").map(function(c){return c.trim()})});var hd=rows[0];r=JSON.stringify(rows.slice(1).map(function(row){var o={};hd.forEach(function(hh,i){o[hh]=row[i]||""});return o}),null,2)}
+  else if(f==="json2csv"){var arr=JSON.parse(text);if(!Array.isArray(arr))throw new Error("JSON array chahiye");var keys=Object.keys(arr[0]);r=keys.join(",")+"\n"+arr.map(function(o){return keys.map(function(k){return '"'+String(o[k]==null?"":o[k]).replace(/"/g,'""')+'"'}).join(",")}).join("\n")}
+  else if(f==="json2xml"){var o=JSON.parse(text);function x(tag,v){if(typeof v==="object"&&v!==null)return "<"+tag+">"+Object.keys(v).map(function(k){return x(k,v[k])}).join("")+"</"+tag+">";return "<"+tag+">"+esc(v)+"</"+tag+">"}r=x("root",o)}
+  else if(f==="csv2html"){var rr=text.trim().split(/\n/).map(function(l){return l.split(",")});r="<table>\n"+rr.map(function(row,i){var tg=i===0?"th":"td";return "  <tr>"+row.map(function(c){return "<"+tg+">"+esc(c.trim())+"</"+tg+">"}).join("")+"</tr>"}).join("\n")+"\n</table>"}
+  else if(f==="md2html"){r=text.replace(/^### (.*)$/gm,"<h3>$1</h3>").replace(/^## (.*)$/gm,"<h2>$1</h2>").replace(/^# (.*)$/gm,"<h1>$1</h1>").replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/\*(.+?)\*/g,"<em>$1</em>").replace(/\[(.+?)\]\((.+?)\)/g,'<a href="$2">$1</a>').split(/\n\s*\n/).map(function(p){return /^</.test(p.trim())?p:"<p>"+p+"</p>"}).join("\n")}
+  else{r="Done:\n"+text}
+  }catch(e){r="Error: "+e.message+" — input format check karo."}
+  if(f==="density"){var kw=(window.__kw||"");r="Keyword density ke liye: upar text daalo, phir ye tool dobara kholkar keyword agle step me milega. Abhi ke liye text ke top words:\n"+text.toLowerCase().split(/\W+/).filter(function(w){return w.length>3}).slice(0,5).join(", ")}
+  out(esc(r));
+  var prev=$("#wActions");if(prev&&f!=="sitemap"){actions([{label:"Run again",fn:function(){runTextTool(t,val("wIn"))}}])}
+}
+function promptSafeKw(){return ""}
+
+/* ---------- generators ---------- */
+function runGenTool(t,topic){
+  topic=(topic||"").trim();var f=t.fn,r="";
+  if(!topic&&["uuid","lorem"].indexOf(f)===-1){out("Pehle topic / keyword daalo, phir Generate dabao.");return}
+  if(f==="aiwriter"||f==="paragraph"){r=topic+" is an important topic for many people today. Understanding "+topic+" helps you make better decisions, save time, and get better results with less effort.\n\nTo get started with "+topic+", focus on the basics first: what it is, why it matters, and the first small step you can take today. Most beginners fail not because "+topic+" is hard, but because they try to do everything at once.\n\nIn short, start small, stay consistent, and keep improving — that is how "+topic+" starts giving real results.\n\n— Starter draft by TOOLNEST (template engine). Full AI writing arrives with TOOLNEST AI."}
+  else if(f==="essay"){r="ESSAY: "+topic+"\n\nIntroduction: "+topic+" plays a big role in our daily lives…\n\nBody: There are three sides to "+topic+" — its benefits, its challenges, and its future. Each side teaches us something new.\n\nConclusion: In the end, "+topic+" matters because it shapes how we live, learn and grow. Understanding it well is the first step to using it wisely."}
+  else if(f==="resume"){var skills=val("wIn2");r="RESUME CONTENT — "+topic.toUpperCase()+"\n\nProfessional Summary:\n• Motivated "+topic+" with practical skills in "+(skills||"the field")+". Known for honest work, quick learning and meeting deadlines.\n\nKey Skills:\n"+(skills||"").split(",").map(function(s){return "• "+s.trim()}).join("\n")+"\n\nExperience bullets (edit with your real work):\n• Handled daily tasks and delivered work on time\n• Worked with team/customers and solved problems quickly\n• Improved results by organising work better\n\nTip: Apne asli numbers daalo — jaise “sales 20% badhaya” — resume strong banta hai."}
+  else if(f==="email"){r="Subject: Regarding "+topic+"\n\nDear Sir/Madam,\n\nI hope you are well. I am writing regarding "+topic+". I would be grateful if you could look into this at your earliest convenience.\n\nPlease let me know if you need any further details from my side.\n\nThank you for your time.\n\nWarm regards,\n[Your Name]\n[Phone Number]"}
+  else if(f==="blogintro"){r="3 intro ideas for “"+topic+"”:\n\n1. Have you ever wondered about "+topic+"? Most people get it wrong — here is the simple truth, explained step by step.\n\n2. "+topic+" sounds complicated, but it doesn't have to be. In this post, you'll learn the basics in minutes.\n\n3. I spent weeks learning "+topic+" so you don't have to. Here is everything that actually matters."}
+  else if(f==="story"){r="Ek chhote se sheher me, "+topic+" ne sab kuch badal diya…\n\nArjun ne kabhi socha nahi tha ki ek aam din uski zindagi ka sabse bada mod ban jayega. Subah ki chai abhi khatm bhi nahi hui thi ki darwaze par dastak hui — aur wahi se kahani shuru hui.\n\n(Aage ki kahani tum likho — ya TOOLNEST AI aane par poori story yahin banegi.)"}
+  else if(f==="poem"){r="On "+topic+"\n\nIn morning light, so soft and true,\nA dream of "+topic+" grew.\nThrough every storm, through skies of blue,\nMy heart kept walking back to you.\n\n— Ek chhoti si kavita, sirf tumhare liye."}
+  else if(f==="letter"){r="To,\nThe Manager / Principal,\n[Office / School Name]\n\nSubject: Application regarding "+topic+"\n\nRespected Sir/Madam,\n\nI respectfully request you to kindly consider my application regarding "+topic+". I shall be highly grateful for your support.\n\nThank you.\n\nYours faithfully,\n[Your Name]\n[Date]"}
+  else if(f==="coverletter"){r="Dear Hiring Manager,\n\nI am excited to apply for the "+topic+" position. My skills and experience make me a strong fit for your team, and I would love the chance to contribute.\n\nI have a proven record of honest, on-time work and quick learning. I would welcome the opportunity to discuss how I can add value to your organisation.\n\nThank you for your consideration.\n\nSincerely,\n[Your Name]"}
+  else if(f==="keywords"){r="Keyword ideas for “"+topic+"”:\n\n• "+topic+"\n• best "+topic+"\n• "+topic+" online\n• free "+topic+"\n• "+topic+" for beginners\n• how to "+slugify(topic).replace(/-/g," ")+"\n• "+topic+" tips\n• "+topic+" in hindi\n• top 10 "+topic+"\n• "+topic+" 2026\n\nTip: Inme se 3–5 keywords chuno jinpar competition kam ho, aur unhe title + pehle 100 words me use karo."}
+  else if(f==="metatags"){var d=val("wIn2"),u=val("wIn3");r='<title>'+esc(topic)+'</title>\n<meta name="description" content="'+esc(d||topic+" — free online tool on TOOLNEST.")+'">\n<meta name="robots" content="index, follow">\n<link rel="canonical" href="'+esc(u||"https://example.com/")+'">\n<meta property="og:title" content="'+esc(topic)+'">\n<meta property="og:description" content="'+esc(d||topic)+'">'}
+  else if(f==="robots"){var site=(val("wIn2")||"https://example.com").replace(/\/$/,"");r="User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /private/\n\nSitemap: "+site+"/sitemap.xml";setTimeout(function(){actions([{label:"Download robots.txt",fn:function(){dl("robots.txt",r)}}])},0)}
+  else if(f==="serp"){var dd=val("wIn2"),uu=val("wIn3")||"https://example.com/";r="GOOGLE PREVIEW:\n\n"+uu+"\n"+topic+"\n"+(dd||"Yahan tumhari meta description dikhegi — 150–160 characters me page ka fayda likho.")+"\n\nTitle length: "+topic.length+" chars · Description: "+(dd||"").length+" chars"}
+  else if(f==="ogtags"){var d2=val("wIn2"),u2=val("wIn3");r='<meta property="og:type" content="website">\n<meta property="og:title" content="'+esc(topic)+'">\n<meta property="og:description" content="'+esc(d2||topic)+'">\n<meta property="og:url" content="'+esc(u2||"https://example.com/")+'">\n<meta name="twitter:card" content="summary_large_image">'}
+  else if(f==="uuid"){var n=[];for(var i=0;i<5;i++)n.push(crypto.randomUUID?crypto.randomUUID():"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(c){var rr=Math.random()*16|0;return (c==="x"?rr:(rr&0x3|0x8)).toString(16)}));r=n.join("\n")}
+  else if(f==="lorem"){r="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}
+  else if(f==="colorconv"){var hex=topic.replace("#","");if(!/^[0-9a-fA-F]{6}$/.test(hex)){r="Sahi HEX daalo, jaise #0f6b4f";}else{var rr=parseInt(hex.substr(0,2),16),gg=parseInt(hex.substr(2,2),16),bb=parseInt(hex.substr(4,2),16);r="HEX: #"+hex.toUpperCase()+"\nRGB: rgb("+rr+", "+gg+", "+bb+")\nPreview: neeche box me ye rang bhara hai — ";out(esc(r)+'<span style="display:inline-block;width:60px;height:24px;vertical-align:middle;border:1px solid #999;background:#'+hex+'"></span>');return}}
+  else if(f==="caption"){r="Caption ideas for “"+topic+"”:\n\n1. "+topic+" ✨ — small steps, big results. Save this for later! 💾\n2. Nobody talks about this side of "+topic+"… until now. 👀\n3. Day 1 of my "+topic+" journey. Follow along! 🚀\n4. POV: you finally understood "+topic+" 😌\n\nHashtags: #"+slugify(topic).replace(/-/g,"")+" #viral #reels #trending"}
+  else if(f==="hashtags"){var base=slugify(topic).replace(/-/g,"");r="#"+base+" #"+base+"india #"+base+"tips #viral #trending #reels #explore #instagood #daily #motivation #india #hindi #shorts #fyp #learnontiktok\n\nTip: Har post me 5–10 relevant hashtags kaafi hain — 30 bharne se reach nahi badhti."}
+  else if(f==="bio"){r="Bio ideas:\n\n1. ✨ "+topic+" | Helping you grow, one post at a time 📩 DM for collab\n2. "+topic+" lover ❤️ | 📍 India | New posts daily\n3. Sharing "+topic+" tips & tricks 🚀 Join the journey 👇"}
+  else if(f==="yttitle"){r="YouTube title ideas for “"+topic+"”:\n\n1. "+topic+" — Complete Guide for Beginners (2026)\n2. Nobody Tells You This About "+topic+"! 😱\n3. I Tried "+topic+" for 30 Days — Honest Results\n4. "+topic+": 5 Mistakes Beginners Always Make\n5. How to Master "+topic+" in 10 Minutes\n6. "+topic+" Explained in Hindi — आसान भाषा में"}
+  else if(f==="ytdesc"){r="📌 "+topic+" — poori jaankari is video me!\n\nIs video me tum seekhoge:\n✅ "+topic+" kya hai\n✅ Shuruaat kaise karein\n✅ Aam galtiyan jo avoid karni hain\n\n⏰ Chapters:\n00:00 Intro\n01:00 Basics\n05:00 Tips\n\n👍 Video pasand aaye to LIKE karo, SHARE karo aur channel ko SUBSCRIBE karo!\n\n#"+slugify(topic).replace(/-/g,"")+" #youtube #hindi"}
+  else if(f==="username"){var b=slugify(topic).replace(/-/g,"");r="Username ideas:\n\n• "+b+"_official\n• the.real."+b+"\n• "+b+".daily\n• its_"+b+"\n• "+b+"_hub\n• "+b+"wala\n• official."+b+"\n• "+b+"2026"}
+  else if(f==="postidea"){r="Post / Reel ideas for “"+topic+"”:\n\n1. “3 galtiyan jo sab "+topic+" me karte hain” — list reel\n2. Before / After transformation video\n3. “₹0 me "+topic+" kaise start karein” — step-by-step\n4. Ek common myth todo — hook: “Ye jhooth hai!”\n5. Apni 30-day progress ki diary series banao\n6. Comments ke sawalon ke jawab — Q&A reel"}
+  else if(f==="hook"){r="Hook lines for “"+topic+"”:\n\n1. “Ruko! "+topic+" ke baare me ye koi nahi batata…”\n2. “Agar tum bhi ye galti kar rahe ho, to video tumhare liye hai.”\n3. “Sirf 10 second me samjho "+topic+" ka sabse bada secret.”\n4. “Maine "+topic+" me 30 din lagaye — result dekhkar hairaan reh jaoge.”"}
+  else if(f==="pdfwm"){r="WATERMARK PLAN\nText: "+topic+"\nPosition: Centre, diagonal (-45°)\nOpacity: 0.15 – 0.25 (halka rakho, text padhne layak rahe)\nFont size: 48–60\n\nNote: Asli PDF par watermark lagana full PDF editor step hai — public site par PDF engine ke saath aayega."}
+  else if(f==="pdfsplit"){r="SPLIT PLAN for: "+topic+"\nExample ranges:\n• Part 1: pages 1–5\n• Part 2: pages 6–10\n\nNote: Apni PDF ke total pages pehle PDF Page Counter se dekho, phir ranges banao."}
+  else{r="Generated for “"+topic+"”:\n\n(Starter generator — is tool ka full version roadmap me hai.)"}
+  out(esc(r));
+  actions([{label:"Generate again",fn:function(){runGenTool(t,val("wIn"))}}]);
+}
+
+/* ---------- calculators ---------- */
+var CALC_FIELDS={
+ age:[["Date of birth","f1","date",""]],
+ emi:[["Loan amount (₹)","f1","number",100000],["Annual interest rate (%)","f2","number",10],["Tenure (months)","f3","number",12]],
+ percent:[["Value (number)","f1","number",200],["Percentage (%)","f2","number",15]],
+ bmi:[["Weight (kg)","f1","number",70],["Height (cm)","f2","number",170]],
+ gst:[["Amount (₹)","f1","number",1000],["GST rate (%) — 5, 12, 18 ya 28","f2","number",18]],
+ sip:[["Monthly investment (₹)","f1","number",5000],["Expected return (% per year)","f2","number",12],["Time (years)","f3","number",10]],
+ discount:[["Original price (₹)","f1","number",1000],["Discount (%)","f2","number",20]],
+ interest:[["Principal (₹)","f1","number",10000],["Rate (% per year)","f2","number",8],["Time (years)","f3","number",5]],
+ datediff:[["Start date","f1","date",""],["End date","f2","date",""]],
+ tip:[["Bill amount (₹)","f1","number",1000],["Tip (%)","f2","number",10],["People","f3","number",2]],
+ unit:[["Value","f1","number",1]],
+ randnum:[["Minimum","f1","number",1],["Maximum","f2","number",100]],
+ numwords:[["Number","f1","number",12345]],
+ roman:[["Number (1–3999)","f1","number",2026]]
+};
+function buildCalc(t){
+  var fs=CALC_FIELDS[t.fn]||CALC_FIELDS.percent;
+  var h=fs.map(function(x){return field(x[0],x[1],x[2],x[3])}).join("");
+  if(t.fn==="unit")h+='<label class="fl">Convert</label><select class="wi" id="fU"><option value="km-mi">Kilometres → Miles</option><option value="mi-km">Miles → Kilometres</option><option value="kg-lb">Kg → Pounds</option><option value="lb-kg">Pounds → Kg</option><option value="c-f">°C → °F</option><option value="f-c">°F → °C</option><option value="cm-in">cm → Inches</option><option value="in-cm">Inches → cm</option></select>';
+  $("#wBody").innerHTML=h;
+  actions([{label:"Calculate",fn:function(){runCalc(t)}}]);
+}
+function runCalc(t){
+  var f=t.fn,a=num("f1"),b=num("f2"),c=num("f3"),r="";
+  if(f==="age"){var d=new Date(val("f1"));if(isNaN(d)){out("Janm tareekh chuno.");return}var now=new Date();var age=now.getFullYear()-d.getFullYear();var m=now.getMonth()-d.getMonth();if(m<0||(m===0&&now.getDate()<d.getDate()))age--;var days=Math.floor((now-d)/864e5);r="Age: "+age+" years\nTotal days lived: "+days.toLocaleString("en-IN")+"\nApprox months: "+Math.floor(days/30.44)+"\nNext birthday me lagbhag: "+(365-(days%365))+" din (andaaz)"}
+  else if(f==="emi"){var mr=b/1200,n=c||12;var emi=mr===0?a/n:a*mr*Math.pow(1+mr,n)/(Math.pow(1+mr,n)-1);r="Monthly EMI: "+inr(Math.round(emi))+"\nTotal payment: "+inr(Math.round(emi*n))+"\nTotal interest: "+inr(Math.round(emi*n-a))+"\nPrincipal: "+inr(a)}
+  else if(f==="percent"){r=b+"% of "+a+" = "+(a*b/100)+"\n\nAur: "+a+" is "+(b?((a/b)*100).toFixed(2):0)+"% of "+b}
+  else if(f==="bmi"){var h=b/100;var bmi=a/(h*h);var cat=bmi<18.5?"Underweight (kam wazan)":bmi<25?"Normal ✓":bmi<30?"Overweight":"Obese";r="BMI: "+bmi.toFixed(1)+"\nCategory: "+cat+"\nHealthy weight range for your height: "+(18.5*h*h).toFixed(1)+" – "+(24.9*h*h).toFixed(1)+" kg"}
+  else if(f==="gst"){var gst=a*b/100;r="GST ("+b+"%): "+inr(gst)+"\nTotal with GST: "+inr(a+gst)+"\n\nAgar amount GST-sahit hai:\nBase amount: "+inr(a/(1+b/100))+"\nGST part: "+inr(a-a/(1+b/100))}
+  else if(f==="sip"){var i=b/1200,n=c*12;var fv=a*((Math.pow(1+i,n)-1)/i)*(1+i);r="Invested: "+inr(a*n)+"\nEstimated value: "+inr(Math.round(fv))+"\nEstimated gains: "+inr(Math.round(fv-a*n))+"\nNote: Ye andaaz hai — market returns fix nahi hote."}
+  else if(f==="discount"){var off=a*b/100;r="Discount amount: "+inr(off)+"\nFinal price: "+inr(a-off)+"\nYou save: "+b+"%"}
+  else if(f==="interest"){var si=a*b*c/100;var ci=a*Math.pow(1+b/100,c)-a;r="Simple Interest: "+inr(Math.round(si))+" → Total "+inr(a+Math.round(si))+"\nCompound Interest: "+inr(Math.round(ci))+" → Total "+inr(a+Math.round(ci))}
+  else if(f==="datediff"){var d1=new Date(val("f1")),d2=new Date(val("f2"));if(isNaN(d1)||isNaN(d2)){out("Dono dates chuno.");return}var dd=Math.round((d2-d1)/864e5);r="Difference: "+dd+" days\n= "+Math.floor(Math.abs(dd)/7)+" weeks "+(Math.abs(dd)%7)+" days\n= lagbhag "+(Math.abs(dd)/30.44).toFixed(1)+" months"}
+  else if(f==="tip"){var tip=a*b/100;r="Tip: "+inr(tip)+"\nTotal bill: "+inr(a+tip)+"\nPer person ("+c+"): "+inr((a+tip)/(c||1))}
+  else if(f==="unit"){var u=val("fU"),v=a,res="";var map={"km-mi":[0.621371,"miles"],"mi-km":[1.60934,"km"],"kg-lb":[2.20462,"pounds"],"lb-kg":[0.453592,"kg"],"cm-in":[0.393701,"inches"],"in-cm":[2.54,"cm"]};if(u==="c-f")res=(v*9/5+32).toFixed(2)+" °F";else if(u==="f-c")res=((v-32)*5/9).toFixed(2)+" °C";else res=(v*map[u][0]).toFixed(4)+" "+map[u][1];r="Result: "+res}
+  else if(f==="randnum"){var lo=Math.min(a,b),hi=Math.max(a,b);var nums=[];for(var i=0;i<6;i++)nums.push(Math.floor(Math.random()*(hi-lo+1))+lo);r="Random numbers: "+nums.join(", ")}
+  else if(f==="numwords"){r="In words: "+numToWords(Math.floor(a))}
+  else if(f==="roman"){r="Roman: "+toRoman(Math.floor(a))}
+  out(esc(r));actions([{label:"Calculate again",fn:function(){runCalc(t)}}]);
+}
+function numToWords(n){if(n===0)return "zero";var ones=["","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"],tens=["","","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"];function two(x){return x<20?ones[x]:tens[Math.floor(x/10)]+(x%10?"-"+ones[x%10]:"")}function three(x){return (Math.floor(x/100)?ones[Math.floor(x/100)]+" hundred ":"")+two(x%100)}var parts=[];var cr=Math.floor(n/1e7);n%=1e7;var lk=Math.floor(n/1e5);n%=1e5;var th=Math.floor(n/1e3);n%=1e3;if(cr)parts.push(three(cr)+" crore");if(lk)parts.push(two(lk)+" lakh");if(th)parts.push(two(th)+" thousand");if(n)parts.push(three(n));return parts.join(" ").trim()||"zero"}
+function toRoman(n){if(n<1||n>3999)return "1–3999 ke beech number daalo";var tab=[[1000,"M"],[900,"CM"],[500,"D"],[400,"CD"],[100,"C"],[90,"XC"],[50,"L"],[40,"XL"],[10,"X"],[9,"IX"],[5,"V"],[4,"IV"],[1,"I"]];var s="";tab.forEach(function(p){while(n>=p[0]){s+=p[1];n-=p[0]}});return s}
+
+/* ---------- image tools ---------- */
+function buildImage(t){
+  $("#wBody").innerHTML='<label class="fl">Choose an image</label><input class="wi" type="file" id="wFile" accept="image/*"/>'+(t.fn==="watermark"||t.fn==="meme"?field(t.fn==="meme"?"Top text":"Watermark text","wTxt","text","© TOOLNEST")+(t.fn==="meme"?field("Bottom text","wTxt2","text",""):""):"")+(t.fn==="resize"?field("Width (px)","wW","number",800)+field("Height (px)","wH","number",600):"")+(t.fn==="compress"?field("Quality (10–100, kam = chhoti file)","wQ","number",70):"")+'<canvas class="wcanvas" id="wCanvas" width="10" height="10"></canvas>';
+  document.getElementById("wFile").addEventListener("change",function(){imgFile=this.files[0];if(imgFile){imgURL=URL.createObjectURL(imgFile);drawImageTool(t)}});
+  actions([{label:"Process image",fn:function(){if(!imgFile){out("Pehle ek image chuno.");return}drawImageTool(t,true)}}]);
+}
+function loadImg(cb){var im=new Image();im.onload=function(){cb(im)};im.src=imgURL}
+function drawImageTool(t,run){
+  loadImg(function(im){
+    var cv=$("#wCanvas"),ctx=cv.getContext("2d");var W=im.naturalWidth,H=im.naturalHeight;
+    if(t.fn==="info"){cv.width=Math.min(W,600);cv.height=cv.width*H/W;ctx.drawImage(im,0,0,cv.width,cv.height);out(esc("Name: "+imgFile.name+"\nType: "+imgFile.type+"\nSize: "+(imgFile.size/1024).toFixed(1)+" KB\nDimensions: "+W+" × "+H+" px"));return}
+    if(t.fn==="picker"){cv.width=Math.min(W,700);cv.height=cv.width*H/W;ctx.drawImage(im,0,0,cv.width,cv.height);out("Image par kahin bhi tap/click karo — us point ka rang milega.");cv.onclick=function(e){var rct=cv.getBoundingClientRect();var x=Math.floor((e.clientX-rct.left)*cv.width/rct.width),y=Math.floor((e.clientY-rct.top)*cv.height/rct.height);var d=ctx.getImageData(x,y,1,1).data;var hex="#"+[d[0],d[1],d[2]].map(function(v){return v.toString(16).padStart(2,"0")}).join("");out('Colour: <b>'+hex.toUpperCase()+'</b> · rgb('+d[0]+', '+d[1]+', '+d[2]+') <span style="display:inline-block;width:44px;height:20px;vertical-align:middle;background:'+hex+';border:1px solid #999"></span>')};return}
+    var type="image/png",name="toolnest-image.png",q=0.92;
+    if(t.fn==="compress"){cv.width=W;cv.height=H;ctx.drawImage(im,0,0);type="image/jpeg";name="compressed.jpg";q=(num("wQ")||70)/100}
+    else if(t.fn==="resize"){cv.width=num("wW")||W;cv.height=num("wH")||H;ctx.drawImage(im,0,0,cv.width,cv.height)}
+    else if(t.fn==="crop"){var s=Math.min(W,H);cv.width=s;cv.height=s;ctx.drawImage(im,(W-s)/2,(H-s)/2,s,s,0,0,s,s);name="cropped-square.png"}
+    else if(t.fn==="tojpg"||t.fn==="convert"){cv.width=W;cv.height=H;ctx.fillStyle="#ffffff";ctx.fillRect(0,0,W,H);ctx.drawImage(im,0,0);type="image/jpeg";name="converted.jpg"}
+    else if(t.fn==="topng"){cv.width=W;cv.height=H;ctx.drawImage(im,0,0)}
+    else if(t.fn==="favicon"){cv.width=64;cv.height=64;ctx.drawImage(im,0,0,64,64);name="favicon.png"}
+    else if(t.fn==="upscale"){cv.width=W*2;cv.height=H*2;ctx.imageSmoothingEnabled=true;ctx.drawImage(im,0,0,cv.width,cv.height);name="upscaled-2x.png"}
+    else if(t.fn==="tob64"){cv.width=Math.min(W,500);cv.height=cv.width*H/W;ctx.drawImage(im,0,0,cv.width,cv.height);var rd=new FileReader();rd.onload=function(){out(esc(String(rd.result).slice(0,400))+"…\n\n(Pura Base64 download button se milega)");actions([{label:"Download Base64 (.txt)",fn:function(){dl("image-base64.txt",rd.result)}}])};rd.readAsDataURL(imgFile);return}
+    else if(t.fn==="watermark"||t.fn==="meme"){cv.width=W;cv.height=H;ctx.drawImage(im,0,0);ctx.fillStyle="rgba(255,255,255,.85)";ctx.strokeStyle="rgba(0,0,0,.6)";var fs=Math.max(20,W/18);ctx.font="bold "+fs+"px sans-serif";ctx.textAlign="center";if(t.fn==="watermark"){ctx.save();ctx.translate(W/2,H/2);ctx.rotate(-0.5);ctx.fillText(val("wTxt")||"© TOOLNEST",0,0);ctx.restore()}else{ctx.fillText((val("wTxt")||"").toUpperCase(),W/2,fs+10);ctx.strokeText((val("wTxt")||"").toUpperCase(),W/2,fs+10);var b2=(val("wTxt2")||"").toUpperCase();ctx.fillText(b2,W/2,H-16);ctx.strokeText(b2,W/2,H-16)}name=t.fn+".png"}
+    else{cv.width=W;cv.height=H;ctx.drawImage(im,0,0)}
+    if(t.fn==="imgpdf"){cv.width=W;cv.height=H;ctx.drawImage(im,0,0);if(run){makeImagePdf(cv)}else out("Image ready hai — “Process image” dabao, PDF download hoga.");return}
+    if(run||true){cv.toBlob(function(b){out(esc("Ready ✓ Original: "+(imgFile.size/1024).toFixed(1)+" KB → New: "+(b.size/1024).toFixed(1)+" KB · "+cv.width+"×"+cv.height+" px"));actions([{label:"Download image",fn:function(){dl(name,b)}},{label:"Process again",ghost:true,fn:function(){drawImageTool(t,true)}}])},type,q)}
+  });
+}
+function makeImagePdf(cv){try{var jsPDF=window.jspdf.jsPDF;var pdf=new jsPDF({orientation:cv.width>cv.height?"landscape":"portrait",unit:"px",format:[cv.width,cv.height]});pdf.addImage(cv.toDataURL("image/jpeg",0.92),"JPEG",0,0,cv.width,cv.height);pdf.save("toolnest-image.pdf");out("PDF download ho gaya ✓")}catch(e){out("PDF library load nahi hui — internet check karke dobara try karo.")}}
+function makeTextPdf(text){try{var jsPDF=window.jspdf.jsPDF;var pdf=new jsPDF();var lines=pdf.splitTextToSize(text||" ",170);pdf.text(lines,20,20);pdf.save("toolnest-text.pdf");out("PDF download ho gaya ✓")}catch(e){out("PDF library load nahi hui — internet check karke dobara try karo.")}}
+
+/* ---------- PDF tools ---------- */
+function buildPdf(t){
+  if(t.fn==="pdfmerge"){$("#wBody").innerHTML='<label class="fl">PDF file 1</label><input class="wi" type="file" id="wFile" accept="application/pdf"/><label class="fl">PDF file 2</label><input class="wi" type="file" id="wFile2" accept="application/pdf"/><div class="warn">Starter note: Asli page-level merge ke liye PDF engine (pdf-lib) public site par judega. Abhi dono files ki jaankari neeche milegi taaki tum apna plan confirm kar sako.</div>';actions([{label:"Check both PDFs",fn:function(){pdfInfoMulti()}}]);return}
+  $("#wBody").innerHTML='<label class="fl">Choose a PDF file</label><input class="wi" type="file" id="wFile" accept="application/pdf"/>';
+  actions([{label:"Check PDF",fn:function(){pdfInfo(t)}}]);
+}
+function readPdf(file,cb){var rd=new FileReader();rd.onload=function(){cb(rd.result)};rd.readAsText(file)}
+function pdfInfo(t){var f=document.getElementById("wFile").files[0];if(!f){out("Pehle PDF file chuno.");return}readPdf(f,function(txt){var pages=(txt.match(/\/Type\s*\/Page[^s]/g)||[]).length||(txt.match(/\/Count\s+(\d+)/)||[])[1]||"—";out(esc("File: "+f.name+"\nSize: "+(f.size/1024).toFixed(1)+" KB\nEstimated pages: "+pages+"\n\nNote: Kuch PDFs me page count andaaz se milta hai. Rotate/compress jaise kaam full PDF engine ke saath aayenge."))})}
+function pdfInfoMulti(){var a=document.getElementById("wFile").files[0],b=document.getElementById("wFile2").files[0];if(!a||!b){out("Dono PDF files chuno.");return}out(esc("File 1: "+a.name+" ("+(a.size/1024).toFixed(1)+" KB)\nFile 2: "+b.name+" ("+(b.size/1024).toFixed(1)+" KB)\nCombined size: "+((a.size+b.size)/1024).toFixed(1)+" KB\n\nMerge engine roadmap me hai — ye starter sirf files verify karta hai."))}
+
+/* ---------- QR, password, timer ---------- */
+function runQR(){var v=val("wIn");$("#wBody").innerHTML=field("Text or link for QR code","wIn","text",v)+'<canvas class="wcanvas" id="wQr" width="220" height="220"></canvas>';if(window.QRCode){QRCode.toCanvas(document.getElementById("wQr"),v||"https://",{width:220},function(err){out(err?"QR nahi bana — text check karo.":"QR ready ✓ Neeche ke button se download karo.");if(!err)actions([{label:"Download QR PNG",fn:function(){document.getElementById("wQr").toBlob(function(b){dl("toolnest-qr.png",b)})}}])})}else{out("QR library load nahi hui — internet check karke page dobara kholo.")}}
+function runPass(){var len=Math.min(64,Math.max(6,num("wLen")||16));var chars="ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";if(document.getElementById("wSym")&&document.getElementById("wSym").checked)chars+="!@#$%^&*";var p="";var arr=new Uint32Array(len);crypto.getRandomValues(arr);for(var i=0;i<len;i++)p+=chars[arr[i]%chars.length];out(esc("Your password:\n"+p+"\n\nIse kahin safe jagah save karo — ye password sirf yahin bana hai, kahin bheja nahi gaya."));actions([{label:"Generate another",fn:runPass},{label:"Copy password",ghost:true,fn:function(){copyTxt(p,this)}}])}
+function tick(){var m=String(Math.floor(timerSec/60)).padStart(2,"0"),s=String(timerSec%60).padStart(2,"0");var el=document.getElementById("wClock");if(el)el.textContent=m+":"+s}
+function startTimer(){stopTimer();timerInt=setInterval(function(){timerSec++;tick()},1000)}
+function stopTimer(){if(timerInt)clearInterval(timerInt);timerInt=null}
+
+renderCats();renderTools();
+</script>
+</body>
+</html>
